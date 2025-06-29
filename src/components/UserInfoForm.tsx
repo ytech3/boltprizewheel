@@ -256,14 +256,38 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
           <div className="order-1 lg:order-2 flex justify-center">
             <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[450px] lg:h-[450px]">
               {/* Pointer */}
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 z-20">
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 z-10">
                 <div className="w-0 h-0 border-l-6 border-r-6 border-b-8 border-l-transparent border-r-transparent border-b-white drop-shadow-lg"></div>
               </div>
 
               {/* Wheel with proper segments */}
               <div className="w-full h-full rounded-full relative overflow-hidden border-8 border-gray-300 shadow-2xl">
                 <svg className="w-full h-full" viewBox="0 0 200 200">
-                  {/* First render all background segments */}
+                  <defs>
+                    {/* Define clipping paths for each segment to prevent text overflow */}
+                    {previewPrizes.map((_, index) => {
+                      const segmentAngle = 360 / previewPrizes.length;
+                      const startAngle = index * segmentAngle;
+                      const endAngle = (index + 1) * segmentAngle;
+                      
+                      const startAngleRad = (startAngle - 90) * Math.PI / 180;
+                      const endAngleRad = (endAngle - 90) * Math.PI / 180;
+                      
+                      const x1 = 100 + 90 * Math.cos(startAngleRad);
+                      const y1 = 100 + 90 * Math.sin(startAngleRad);
+                      const x2 = 100 + 90 * Math.cos(endAngleRad);
+                      const y2 = 100 + 90 * Math.sin(endAngleRad);
+                      
+                      const largeArcFlag = segmentAngle > 180 ? 1 : 0;
+                      
+                      return (
+                        <clipPath key={`preview-clip-${index}`} id={`preview-segment-clip-${index}`}>
+                          <path d={`M 100 100 L ${x1} ${y1} A 90 90 0 ${largeArcFlag} 1 ${x2} ${y2} Z`} />
+                        </clipPath>
+                      );
+                    })}
+                  </defs>
+                  
                   {previewPrizes.map((prize, index) => {
                     const segmentAngle = 360 / previewPrizes.length;
                     const startAngle = index * segmentAngle;
@@ -278,22 +302,6 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                     const y2 = 100 + 90 * Math.sin(endAngleRad);
                     
                     const largeArcFlag = segmentAngle > 180 ? 1 : 0;
-                    
-                    return (
-                      <path
-                        key={`preview-background-${index}`}
-                        d={`M 100 100 L ${x1} ${y1} A 90 90 0 ${largeArcFlag} 1 ${x2} ${y2} Z`}
-                        fill={prize.color}
-                        stroke="#374151"
-                        strokeWidth="2"
-                      />
-                    );
-                  })}
-                  
-                  {/* Then render all text on top */}
-                  {previewPrizes.map((prize, index) => {
-                    const segmentAngle = 360 / previewPrizes.length;
-                    const startAngle = index * segmentAngle;
                     const textAngle = startAngle + segmentAngle / 2;
                     
                     // Split text into lines
@@ -303,45 +311,58 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                     const textColor = prize.color === '#ddd6fe' ? '#1e1b4b' : '#374151';
                     
                     return (
-                      <g key={`preview-text-${index}`} transform={`translate(100, 100) rotate(${textAngle})`}>
-                        {/* Header line (closer to center) */}
-                        <text
-                          x="0"
-                          y="-55"
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                          fill={textColor}
-                          fontSize="14"
-                          fontWeight="bold"
-                          letterSpacing="0.5"
-                          transform="rotate(90)"
-                        >
-                          {lines[0]}
-                        </text>
+                      <g key={`preview-segment-${index}`}>
+                        {/* Segment path */}
+                        <path
+                          d={`M 100 100 L ${x1} ${y1} A 90 90 0 ${largeArcFlag} 1 ${x2} ${y2} Z`}
+                          fill={prize.color}
+                          stroke="#374151"
+                          strokeWidth="2"
+                        />
                         
-                        {/* Subtitle line (extending outward) */}
-                        {lines[1] && (
-                          <text
-                            x="0"
-                            y="-35"
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                            fill={textColor}
-                            fontSize="12"
-                            fontWeight="600"
-                            letterSpacing="0.4"
-                            transform="rotate(90)"
-                          >
-                            {lines[1]}
-                          </text>
-                        )}
+                        {/* Text group with clipping to prevent overlap */}
+                        <g clipPath={`url(#preview-segment-clip-${index})`}>
+                          <g transform={`translate(100, 100) rotate(${textAngle})`}>
+                            {/* Header line (closer to center) */}
+                            <text
+                              x="0"
+                              y="-55"
+                              textAnchor="middle"
+                              dominantBaseline="middle"
+                              fill={textColor}
+                              fontSize="11"
+                              fontWeight="bold"
+                              letterSpacing="0.5"
+                              transform="rotate(90)"
+                            >
+                              {lines[0]}
+                            </text>
+                            
+                            {/* Subtitle line (extending outward) */}
+                            {lines[1] && (
+                              <text
+                                x="0"
+                                y="-35"
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                fill={textColor}
+                                fontSize="10"
+                                fontWeight="600"
+                                letterSpacing="0.4"
+                                transform="rotate(90)"
+                              >
+                                {lines[1]}
+                              </text>
+                            )}
+                          </g>
+                        </g>
                       </g>
                     );
                   })}
                 </svg>
 
                 {/* Center circle with Culver's logo */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-blue-800 rounded-full border-4 border-white flex items-center justify-center z-10">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-blue-800 rounded-full border-4 border-white flex items-center justify-center">
                   <span className="text-white font-bold text-lg italic">Culver's</span>
                 </div>
               </div>
