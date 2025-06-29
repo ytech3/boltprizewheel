@@ -44,12 +44,18 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
     setIsSpinning(true);
     const selectedPrize = selectWinner();
     const prizeIndex = prizes.findIndex(p => p.id === selectedPrize.id);
+    
+    // Calculate the angle for the selected prize
     const segmentAngle = 360 / prizes.length;
     const prizeAngle = prizeIndex * segmentAngle;
+    
+    // Add multiple rotations + target angle
     const spinAmount = 360 * 5 + (360 - prizeAngle) + (segmentAngle / 2);
     const newRotation = rotation + spinAmount;
+    
     setRotation(newRotation);
 
+    // Set winner after animation completes
     setTimeout(() => {
       setWinner(selectedPrize);
       setIsSpinning(false);
@@ -66,9 +72,12 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden">
+      {/* Background crowd image overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center opacity-30"
-        style={{ backgroundImage: `url('https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')` }}
+        style={{
+          backgroundImage: `url('https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')`
+        }}
       />
       <div className="absolute inset-0 bg-slate-900/70" />
       
@@ -91,10 +100,14 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
         </div>
 
         <div className="relative">
-          <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px]">
+          {/* Wheel Container */}
+          <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[450px] lg:h-[450px]">
+            {/* Pointer */}
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 z-20">
-              <div className="w-0 h-0 border-l-8 border-r-8 border-b-10 border-l-transparent border-r-transparent border-b-white drop-shadow-lg"></div>
+              <div className="w-0 h-0 border-l-6 border-r-6 border-b-8 border-l-transparent border-r-transparent border-b-white drop-shadow-lg"></div>
             </div>
+
+            {/* Wheel */}
             <div
               ref={wheelRef}
               className="w-full h-full rounded-full border-8 border-gray-300 shadow-2xl relative overflow-hidden transition-transform duration-4000 ease-out"
@@ -103,18 +116,24 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                 transitionTimingFunction: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
               }}
             >
+              {/* Wheel segments with proper SVG approach */}
               <svg className="w-full h-full" viewBox="0 0 200 200">
+                {/* First render all background segments */}
                 {prizes.map((prize, index) => {
                   const segmentAngle = 360 / prizes.length;
                   const startAngle = index * segmentAngle;
                   const endAngle = (index + 1) * segmentAngle;
+                  
                   const startAngleRad = (startAngle - 90) * Math.PI / 180;
                   const endAngleRad = (endAngle - 90) * Math.PI / 180;
+                  
                   const x1 = 100 + 90 * Math.cos(startAngleRad);
                   const y1 = 100 + 90 * Math.sin(startAngleRad);
                   const x2 = 100 + 90 * Math.cos(endAngleRad);
                   const y2 = 100 + 90 * Math.sin(endAngleRad);
+                  
                   const largeArcFlag = segmentAngle > 180 ? 1 : 0;
+                  
                   return (
                     <path
                       key={`background-${index}`}
@@ -125,41 +144,48 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                     />
                   );
                 })}
+                
+                {/* Then render all text on top */}
                 {prizes.map((prize, index) => {
                   const segmentAngle = 360 / prizes.length;
                   const startAngle = index * segmentAngle;
                   const textAngle = startAngle + segmentAngle / 2;
+                  
+                  // Split text into lines
                   const lines = prize.name.split('\n');
+                  
+                  // Determine text color based on background
                   const textColor = prize.color === '#ddd6fe' ? '#1e1b4b' : '#374151';
                   
                   return (
                     <g key={`text-${index}`} transform={`translate(100, 100) rotate(${textAngle})`}>
+                      {/* Header line (closer to center) */}
                       <text
-                        y={-40}
-                        transform="rotate(90)"
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fill={textColor}
-                        fontSize="14"
-                        fontWeight="bold"
-                        textLength="60"
-                        lengthAdjust="spacingAndGlyphs"
-                        style={{ textTransform: 'uppercase' }}
-                      >
-                        {lines[0]}
-                      </text>
-                      {lines[1] && (
-                        <text
-                          y={-60}
-                          transform="rotate(90)"
+                          x="0"
+                          y="-30"
                           textAnchor="middle"
                           dominantBaseline="middle"
                           fill={textColor}
-                          fontSize="12"
+                          fontSize="15"
                           fontWeight="bold"
-                          textLength="70"
-                          lengthAdjust="spacingAndGlyphs"
-                          style={{ textTransform: 'uppercase' }}
+                          letterSpacing="0.5"
+                          transform="rotate(90)"
+                      >
+                        {lines[0]}
+                      </text>
+                    
+                      {/* Subtitle line (extending outward) */}
+                      {lines[1] && (
+                        <text
+                          x="0"
+                          y="-52"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          fill={textColor}
+                          fontSize="13"
+                          fontWeight="600"
+                          letterSpacing="0.4"
+                          transform="rotate(90)"
                         >
                           {lines[1]}
                         </text>
@@ -168,11 +194,15 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                   );
                 })}
               </svg>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-blue-800 rounded-full border-4 border-white flex items-center justify-center z-10">
-                <span className="text-white font-bold text-lg italic">Culver's</span>
+              
+              {/* Center circle with Culver's logo */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 bg-blue-800 rounded-full border-4 border-white flex items-center justify-center z-10">
+                <span className="text-white font-bold text-sm md:text-lg italic">Culver's</span>
               </div>
             </div>
           </div>
+
+          {/* Spin Button */}
           {!hasSpun && (
             <div className="text-center mt-8">
               <button
@@ -185,16 +215,22 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
                     <span>Spinning...</span>
                   </div>
-                ) : ( 'SPIN NOW!' )}
+                ) : (
+                  'SPIN NOW!'
+                )}
               </button>
             </div>
           )}
         </div>
+
+        {/* Winner Modal */}
         {winner && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center animate-bounce">
               <div className="text-6xl mb-4">🎉</div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">Congratulations!</h2>
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                Congratulations!
+              </h2>
               <p className="text-lg text-gray-600 mb-4">
                 You won: <span className="font-bold text-blue-600">{winner.name.replace(/\n/g, ' ')}</span>
               </p>
@@ -211,6 +247,8 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
             </div>
           </div>
         )}
+
+        {/* Reset Button */}
         <button
           onClick={reset}
           className="mt-8 text-white/80 hover:text-white transition-colors duration-200 flex items-center space-x-2"
