@@ -162,7 +162,7 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                       {/* Header line (closer to center) */}
                       <text
                         x="0"
-                        y="-35"
+                        y="-55"
                         textAnchor="middle"
                         dominantBaseline="middle"
                         fill={textColor}
@@ -178,7 +178,7 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                       {lines[1] && (
                         <text
                           x="0"
-                          y="-55"
+                          y="-35"
                           textAnchor="middle"
                           dominantBaseline="middle"
                           fill={textColor}

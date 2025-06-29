@@ -307,7 +307,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                         {/* Header line (closer to center) */}
                         <text
                           x="0"
-                          y="-35"
+                          y="-55"
                           textAnchor="middle"
                           dominantBaseline="middle"
                           fill={textColor}
@@ -323,7 +323,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                         {lines[1] && (
                           <text
                             x="0"
-                            y="-55"
+                            y="-35"
                             textAnchor="middle"
                             dominantBaseline="middle"
                             fill={textColor}
