@@ -159,32 +159,36 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                   
                   return (
                     <g key={`text-${index}`} transform={`translate(100, 100) rotate(${textAngle})`}>
-                      {/* Header line (closer to center) */}
+                      {/* First line of text (e.g., "AUTOGRAPHED") */}
                       <text
-                          x="0"
-                          y="-30"
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                          fill={textColor}
-                          fontSize="15"
-                          fontWeight="bold"
-                          letterSpacing="0.5"
-                          transform="rotate(90)"
+                        // The 'y' attribute controls the distance from the center.
+                        y={-45}
+                        // This ensures the text is centered on the slice's radial line.
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        fill={textColor}
+                        fontSize={14}
+                        fontWeight="bold"
+                        // This style makes the text ALL CAPS to match the target image.
+                        style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                        // This transform makes the text straight and point outwards from the center.
+                        // This is the key to achieving the desired layout.
+                        transform="rotate(90)"
                       >
                         {lines[0]}
                       </text>
                     
-                      {/* Subtitle line (extending outward) */}
+                      {/* Second line of text (e.g., "BASEBALL") */}
                       {lines[1] && (
                         <text
-                          x="0"
-                          y="-52"
+                          // Positioned further out than the first line.
+                          y={-65}
                           textAnchor="middle"
                           dominantBaseline="middle"
                           fill={textColor}
-                          fontSize="13"
-                          fontWeight="600"
-                          letterSpacing="0.4"
+                          fontSize={12}
+                          fontWeight="bold"
+                          style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
                           transform="rotate(90)"
                         >
                           {lines[1]}
