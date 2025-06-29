@@ -100,11 +100,11 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
         </div>
 
         <div className="relative">
-          {/* Wheel Container */}
-          <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[450px] lg:h-[450px]">
+          {/* Wheel Container - Increased size on large screens */}
+          <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[550px] lg:h-[550px]">
             {/* Pointer */}
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 z-20">
-              <div className="w-0 h-0 border-l-6 border-r-6 border-b-8 border-l-transparent border-r-transparent border-b-white drop-shadow-lg"></div>
+              <div className="w-0 h-0 border-l-8 border-r-8 border-b-10 border-l-transparent border-r-transparent border-b-white drop-shadow-lg"></div>
             </div>
 
             {/* Wheel */}
@@ -159,36 +159,36 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                   
                   return (
                     <g key={`text-${index}`} transform={`translate(100, 100) rotate(${textAngle})`}>
-                      {/* First line of text (e.g., "AUTOGRAPHED") */}
+                      {/* First line of text */}
                       <text
-                        // The 'y' attribute controls the distance from the center.
-                        y={-45}
-                        // This ensures the text is centered on the slice's radial line.
+                        y={-40}
                         textAnchor="middle"
                         dominantBaseline="middle"
                         fill={textColor}
-                        fontSize={14}
+                        fontSize="15"
                         fontWeight="bold"
-                        // This style makes the text ALL CAPS to match the target image.
-                        style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
-                        // This transform makes the text straight and point outwards from the center.
-                        // This is the key to achieving the desired layout.
+                        style={{ textTransform: 'uppercase' }}
+                        // This attribute forces the text to fit within a specific width, guaranteeing no crossover.
+                        textLength="65"
+                        lengthAdjust="spacingAndGlyphs"
                         transform="rotate(90)"
                       >
                         {lines[0]}
                       </text>
                     
-                      {/* Second line of text (e.g., "BASEBALL") */}
+                      {/* Second line of text */}
                       {lines[1] && (
                         <text
-                          // Positioned further out than the first line.
                           y={-65}
                           textAnchor="middle"
                           dominantBaseline="middle"
                           fill={textColor}
-                          fontSize={12}
+                          fontSize="13"
                           fontWeight="bold"
-                          style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                          style={{ textTransform: 'uppercase' }}
+                          // Force this line to fit as well. The width is larger as it's further from the center.
+                          textLength="75"
+                          lengthAdjust="spacingAndGlyphs"
                           transform="rotate(90)"
                         >
                           {lines[1]}
@@ -200,8 +200,8 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
               </svg>
               
               {/* Center circle with Culver's logo */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 bg-blue-800 rounded-full border-4 border-white flex items-center justify-center z-10">
-                <span className="text-white font-bold text-sm md:text-lg italic">Culver's</span>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-blue-800 rounded-full border-4 border-white flex items-center justify-center z-10">
+                <span className="text-white font-bold text-lg italic">Culver's</span>
               </div>
             </div>
           </div>
