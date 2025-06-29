@@ -161,28 +161,28 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                     <g key={`text-${index}`} transform={`translate(100, 100) rotate(${textAngle})`}>
                       {/* Header line (closer to center) */}
                       <text
-                          x="0"
-                          y="-30"
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                          fill={textColor}
-                          fontSize="15"
-                          fontWeight="bold"
-                          letterSpacing="0.5"
-                          transform="rotate(90)"
+                        x="0"
+                        y="-35"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        fill={textColor}
+                        fontSize="14"
+                        fontWeight="bold"
+                        letterSpacing="0.5"
+                        transform="rotate(90)"
                       >
                         {lines[0]}
                       </text>
-                    
+                      
                       {/* Subtitle line (extending outward) */}
                       {lines[1] && (
                         <text
                           x="0"
-                          y="-52"
+                          y="-55"
                           textAnchor="middle"
                           dominantBaseline="middle"
                           fill={textColor}
-                          fontSize="13"
+                          fontSize="12"
                           fontWeight="600"
                           letterSpacing="0.4"
                           transform="rotate(90)"
