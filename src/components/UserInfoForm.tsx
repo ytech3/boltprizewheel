@@ -66,17 +66,6 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
     }
   };
 
-  // Define the prizes for the preview wheel
-  const previewPrizes = [
-    { name: 'Autographed\nBaseball', color: '#ddd6fe' },
-    { name: 'Bay Republic\n30% Off', color: '#e5e7eb' },
-    { name: "Culver's\nFree Concrete Mixer", color: '#ddd6fe' },
-    { name: 'Rays\n2026 Tickets', color: '#e5e7eb' },
-    { name: 'Grand Prize Entry\n2026 Suite Night', color: '#ddd6fe' },
-    { name: 'City Connect\nBomber Jacket', color: '#e5e7eb' },
-    { name: 'Rays\nSwag Bag', color: '#ddd6fe' }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden">
       {/* Background crowd image overlay */}
@@ -255,18 +244,21 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
           {/* Right side - Wheel Preview */}
           <div className="order-1 lg:order-2 flex justify-center">
             <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[450px] lg:h-[450px]">
-              {/* Pointer */}
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 z-10">
-                <div className="w-0 h-0 border-l-6 border-r-6 border-b-8 border-l-transparent border-r-transparent border-b-white drop-shadow-lg"></div>
-              </div>
-
               {/* Wheel with proper segments */}
               <div className="w-full h-full rounded-full relative overflow-hidden border-8 border-gray-300 shadow-2xl">
                 <svg className="w-full h-full" viewBox="0 0 200 200">
                   <defs>
                     {/* Define clipping paths for each segment to prevent text overflow */}
-                    {previewPrizes.map((_, index) => {
-                      const segmentAngle = 360 / previewPrizes.length;
+                    {[
+                      { name: 'GRAND PRIZE ENTRY\n2025 SUITE', color: '#ddd6fe' },
+                      { name: "CULVER'S FREE\nCONCRETE MIXER", color: '#e5e7eb' },
+                      { name: 'GRAND PRIZE ENTRY\n2025 SUITE', color: '#ddd6fe' },
+                      { name: 'RAYS 2026\nTICKETS', color: '#e5e7eb' },
+                      { name: "CULVER'S\nCONCRETE MIXER", color: '#ddd6fe' },
+                      { name: 'AUTOGRAPHED\nBASEBALL', color: '#e5e7eb' },
+                      { name: "CULVER'S\n2025 SUITE", color: '#ddd6fe' }
+                    ].map((_, index) => {
+                      const segmentAngle = 360 / 7;
                       const startAngle = index * segmentAngle;
                       const endAngle = (index + 1) * segmentAngle;
                       
@@ -278,18 +270,24 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                       const x2 = 100 + 90 * Math.cos(endAngleRad);
                       const y2 = 100 + 90 * Math.sin(endAngleRad);
                       
-                      const largeArcFlag = segmentAngle > 180 ? 1 : 0;
-                      
                       return (
                         <clipPath key={`preview-clip-${index}`} id={`preview-segment-clip-${index}`}>
-                          <path d={`M 100 100 L ${x1} ${y1} A 90 90 0 ${largeArcFlag} 1 ${x2} ${y2} Z`} />
+                          <path d={`M 100 100 L ${x1} ${y1} A 90 90 0 0 1 ${x2} ${y2} Z`} />
                         </clipPath>
                       );
                     })}
                   </defs>
                   
-                  {previewPrizes.map((prize, index) => {
-                    const segmentAngle = 360 / previewPrizes.length;
+                  {[
+                    { name: 'GRAND PRIZE ENTRY\n2025 SUITE', color: '#ddd6fe' },
+                    { name: "CULVER'S FREE\nCONCRETE MIXER", color: '#e5e7eb' },
+                    { name: 'GRAND PRIZE ENTRY\n2025 SUITE', color: '#ddd6fe' },
+                    { name: 'RAYS 2026\nTICKETS', color: '#e5e7eb' },
+                    { name: "CULVER'S\nCONCRETE MIXER", color: '#ddd6fe' },
+                    { name: 'AUTOGRAPHED\nBASEBALL', color: '#e5e7eb' },
+                    { name: "CULVER'S\n2025 SUITE", color: '#ddd6fe' }
+                  ].map((prize, index) => {
+                    const segmentAngle = 360 / 7;
                     const startAngle = index * segmentAngle;
                     const endAngle = (index + 1) * segmentAngle;
                     
@@ -301,20 +299,16 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                     const x2 = 100 + 90 * Math.cos(endAngleRad);
                     const y2 = 100 + 90 * Math.sin(endAngleRad);
                     
-                    const largeArcFlag = segmentAngle > 180 ? 1 : 0;
                     const textAngle = startAngle + segmentAngle / 2;
-                    
-                    // Split text into lines
                     const lines = prize.name.split('\n');
                     
                     // Determine text color based on background
                     const textColor = prize.color === '#ddd6fe' ? '#1e1b4b' : '#374151';
                     
                     return (
-                      <g key={`preview-segment-${index}`}>
-                        {/* Segment path */}
+                      <g key={index}>
                         <path
-                          d={`M 100 100 L ${x1} ${y1} A 90 90 0 ${largeArcFlag} 1 ${x2} ${y2} Z`}
+                          d={`M 100 100 L ${x1} ${y1} A 90 90 0 0 1 ${x2} ${y2} Z`}
                           fill={prize.color}
                           stroke="#374151"
                           strokeWidth="2"
@@ -323,36 +317,39 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                         {/* Text group with clipping to prevent overlap */}
                         <g clipPath={`url(#preview-segment-clip-${index})`}>
                           <g transform={`translate(100, 100) rotate(${textAngle})`}>
-                            {/* Header line (closer to center) */}
-                            <text
-                              x="0"
-                              y="-45"
-                              textAnchor="middle"
-                              dominantBaseline="middle"
-                              fill={textColor}
-                              fontSize="7"
-                              fontWeight="bold"
-                              letterSpacing="0.5"
-                              transform="rotate(90)"
-                            >
-                              {lines[0]}
-                            </text>
-                            
-                            {/* Subtitle line (extending outward) */}
-                            {lines[1] && (
+                            {lines.length === 1 ? (
+                              // Single line text - positioned from center outward
                               <text
                                 x="0"
-                                y="-25"
+                                y="-50"
                                 textAnchor="middle"
                                 dominantBaseline="middle"
                                 fill={textColor}
-                                fontSize="6"
-                                fontWeight="600"
-                                letterSpacing="0.4"
+                                fontSize="9"
+                                fontWeight="bold"
+                                letterSpacing="0.8"
                                 transform="rotate(90)"
                               >
-                                {lines[1]}
+                                {lines[0]}
                               </text>
+                            ) : (
+                              // Multi-line text - start closer to center, extend outward
+                              lines.map((line, lineIndex) => (
+                                <text
+                                  key={`preview-text-${index}-${lineIndex}`}
+                                  x="0"
+                                  y={-35 + (lineIndex * 15)}
+                                  textAnchor="middle"
+                                  dominantBaseline="middle"
+                                  fill={textColor}
+                                  fontSize="8"
+                                  fontWeight="bold"
+                                  letterSpacing="0.6"
+                                  transform="rotate(90)"
+                                >
+                                  {line}
+                                </text>
+                              ))
                             )}
                           </g>
                         </g>
@@ -365,6 +362,11 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-blue-800 rounded-full border-4 border-white flex items-center justify-center">
                   <span className="text-white font-bold text-lg italic">Culver's</span>
                 </div>
+              </div>
+
+              {/* Pointer */}
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 z-10">
+                <div className="w-0 h-0 border-l-6 border-r-6 border-b-8 border-l-transparent border-r-transparent border-b-white drop-shadow-lg"></div>
               </div>
             </div>
           </div>

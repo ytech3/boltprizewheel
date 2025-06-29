@@ -8,13 +8,13 @@ interface SpinWheelProps {
 }
 
 const prizes: Prize[] = [
-  { id: 1, name: 'Autographed\nBaseball', color: '#ddd6fe', probability: 0.15 },
-  { id: 2, name: 'Bay Republic\n30% Off', color: '#e5e7eb', probability: 0.20 },
-  { id: 3, name: "Culver's\nFree Concrete Mixer", color: '#ddd6fe', probability: 0.25 },
-  { id: 4, name: 'Rays\n2026 Tickets', color: '#e5e7eb', probability: 0.15 },
-  { id: 5, name: 'Grand Prize Entry\n2026 Suite Night', color: '#ddd6fe', probability: 0.05 },
-  { id: 6, name: 'City Connect\nBomber Jacket', color: '#e5e7eb', probability: 0.10 },
-  { id: 7, name: 'Rays\nSwag Bag', color: '#ddd6fe', probability: 0.10 }
+  { id: 1, name: 'GRAND PRIZE ENTRY\n2025 SUITE', color: '#ddd6fe', probability: 0.05 },
+  { id: 2, name: "CULVER'S FREE\nCONCRETE MIXER", color: '#e5e7eb', probability: 0.25 },
+  { id: 3, name: 'GRAND PRIZE ENTRY\n2025 SUITE', color: '#ddd6fe', probability: 0.05 },
+  { id: 4, name: 'RAYS 2026\nTICKETS', color: '#e5e7eb', probability: 0.15 },
+  { id: 5, name: "CULVER'S\nCONCRETE MIXER", color: '#ddd6fe', probability: 0.20 },
+  { id: 6, name: 'AUTOGRAPHED\nBASEBALL', color: '#e5e7eb', probability: 0.15 },
+  { id: 7, name: "CULVER'S\n2025 SUITE", color: '#ddd6fe', probability: 0.15 }
 ];
 
 export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
@@ -178,36 +178,39 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ userInfo, onReset }) => {
                       {/* Text group with clipping to prevent overlap */}
                       <g clipPath={`url(#segment-clip-${index})`}>
                         <g transform={`translate(100, 100) rotate(${textAngle})`}>
-                          {/* Header line (closer to center) */}
-                          <text
-                            x="0"
-                            y="-45"
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                            fill={textColor}
-                            fontSize="7"
-                            fontWeight="bold"
-                            letterSpacing="0.5"
-                            transform="rotate(90)"
-                          >
-                            {lines[0]}
-                          </text>
-                          
-                          {/* Subtitle line (extending outward) */}
-                          {lines[1] && (
+                          {lines.length === 1 ? (
+                            // Single line text - positioned from center outward
                             <text
                               x="0"
-                              y="-25"
+                              y="-50"
                               textAnchor="middle"
                               dominantBaseline="middle"
                               fill={textColor}
-                              fontSize="6"
-                              fontWeight="600"
-                              letterSpacing="0.4"
+                              fontSize="9"
+                              fontWeight="bold"
+                              letterSpacing="0.8"
                               transform="rotate(90)"
                             >
-                              {lines[1]}
+                              {lines[0]}
                             </text>
+                          ) : (
+                            // Multi-line text - start closer to center, extend outward
+                            lines.map((line, lineIndex) => (
+                              <text
+                                key={`text-${index}-${lineIndex}`}
+                                x="0"
+                                y={-35 + (lineIndex * 15)}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                fill={textColor}
+                                fontSize="8"
+                                fontWeight="bold"
+                                letterSpacing="0.6"
+                                transform="rotate(90)"
+                              >
+                                {line}
+                              </text>
+                            ))
                           )}
                         </g>
                       </g>
