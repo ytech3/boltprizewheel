@@ -318,33 +318,33 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
                         <g clipPath={`url(#preview-segment-clip-${index})`}>
                           <g transform={`translate(100, 100) rotate(${textAngle})`}>
                             {lines.length === 1 ? (
-                              // Single line text - positioned from center outward
+                              // Single line text - positioned in middle of spoke
                               <text
                                 x="0"
-                                y="-50"
+                                y="-45"
                                 textAnchor="middle"
                                 dominantBaseline="middle"
                                 fill={textColor}
-                                fontSize="9"
+                                fontSize="8"
                                 fontWeight="bold"
-                                letterSpacing="0.8"
+                                letterSpacing="0.5"
                                 transform="rotate(90)"
                               >
                                 {lines[0]}
                               </text>
                             ) : (
-                              // Multi-line text - start closer to center, extend outward
+                              // Multi-line text - distribute along the spoke
                               lines.map((line, lineIndex) => (
                                 <text
                                   key={`preview-text-${index}-${lineIndex}`}
                                   x="0"
-                                  y={-35 + (lineIndex * 15)}
+                                  y={-55 + (lineIndex * 18)}
                                   textAnchor="middle"
                                   dominantBaseline="middle"
                                   fill={textColor}
-                                  fontSize="8"
+                                  fontSize="7"
                                   fontWeight="bold"
-                                  letterSpacing="0.6"
+                                  letterSpacing="0.5"
                                   transform="rotate(90)"
                                 >
                                   {line}
